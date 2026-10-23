@@ -21,7 +21,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -460,8 +459,7 @@ public class IconBar implements Part
     if (bounds.width == size && bounds.height == size)
       return image;
 
-    ImageData data = image.getImageData().scaledTo(size,size);
-    Image scaled = new Image(GUI.getDisplay(),data);
+    Image scaled = SWTUtil.getScaledImage(image,size);
     this.images.add(scaled);
     return scaled;
   }

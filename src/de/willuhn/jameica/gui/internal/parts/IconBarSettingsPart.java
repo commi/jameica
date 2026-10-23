@@ -353,8 +353,7 @@ public class IconBarSettingsPart implements Part
     if (bounds.width == size && bounds.height == size)
       return image;
 
-    ImageData data = image.getImageData().scaledTo(size,size);
-    Image scaled = new Image(GUI.getDisplay(),data);
+    Image scaled = SWTUtil.getScaledImage(image,size);
     this.tableImages.add(scaled);
     return scaled;
   }
@@ -654,8 +653,7 @@ public class IconBarSettingsPart implements Part
       if (bounds.width == size && bounds.height == size)
         return image;
 
-      ImageData data = image.getImageData().scaledTo(size,size);
-      Image scaled = new Image(GUI.getDisplay(),data);
+      Image scaled = SWTUtil.getScaledImage(image,size);
       this.images.add(scaled);
       return scaled;
     }

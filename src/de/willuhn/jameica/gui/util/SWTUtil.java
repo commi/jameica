@@ -284,6 +284,28 @@ public class SWTUtil {
 
 
   /**
+   * Liefert das Bild in der angegebenen Kantenlaenge.
+   * Hat das Bild mehrere Aufloesungen, wird die passende verwendet statt die kleinste hochzuskalieren.
+   * @param image das Bild.
+   * @param size Kantenlaenge in Pixeln bei 100% Zoom.
+   * @return neues Bild, das der Aufrufer selbst disposen muss.
+   */
+  public static Image getScaledImage(final Image image, final int size)
+  {
+    final int width = image.getBounds().width;
+    return new Image(GUI.getDisplay(),(ImageDataProvider) z -> {
+      int px = size * z / 100;
+      int zoom = z * size / width;
+      ImageData data = image.getImageData(zoom);
+
+      // Die Aufloesungen sind abgestuft. Ist die gelieferte zu klein, die naechstgroessere verkleinern statt hochzuskalieren
+      if (data.width < px)
+        data = image.getImageData(zoom * px / data.width);
+      return data.width == px && data.height == px ? data : data.scaledTo(px,px);
+    });
+  }
+
+  /**
    * Liefert ein SWT-Image basierend auf dem uebergebenen Dateinamen zurueck.
    * Wenn die Datei nicht existiert, wird stattdessen ein 1x1 Pixel grosses
    * und transparentes Dummy-Bild zurueckgeliefert.
