@@ -37,6 +37,7 @@ import de.willuhn.jameica.gui.internal.parts.PluginListPart;
 import de.willuhn.jameica.gui.parts.Button;
 import de.willuhn.jameica.gui.parts.TablePart;
 import de.willuhn.jameica.gui.util.Color;
+import de.willuhn.jameica.gui.util.SystemIcons;
 import de.willuhn.jameica.messaging.PluginCacheMessageConsumer;
 import de.willuhn.jameica.messaging.SettingsChangedMessage;
 import de.willuhn.jameica.messaging.SettingsRestoredMessage;
@@ -81,6 +82,7 @@ public class SettingsControl extends AbstractControl
   private Input colorMandatoryBG;
   private CheckboxInput mandatoryLabel;
   private CheckboxInput randomSplash;
+  private CheckboxInput systemIcons;
   private CheckboxInput systray;
   private CheckboxInput minimizeToSystray;
   private CheckboxInput navigationVisible;
@@ -398,6 +400,17 @@ public class SettingsControl extends AbstractControl
   }
 
   /**
+   * Liefert eine Checkbox, mit der statt der mitgelieferten Icons die des Desktop-Themes verwendet werden.
+   * @return Checkbox.
+   */
+  public CheckboxInput getSystemIcons()
+  {
+    if (this.systemIcons == null)
+      this.systemIcons = new CheckboxInput(Customizing.SETTINGS.getBoolean(SystemIcons.KEY,false));
+    return this.systemIcons;
+  }
+
+  /**
    * Liefert die Einstellungen fuer die Symbolleiste.
    * @return Einstellungen fuer die Symbolleiste.
    */
@@ -489,6 +502,12 @@ public class SettingsControl extends AbstractControl
       // Look & Feel
       config.setMandatoryLabel(((Boolean)getLabelMandatory().getValue()).booleanValue());
       Customizing.SETTINGS.setAttribute("application.splashscreen.random",((Boolean)getRandomSplash().getValue()).booleanValue());
+      if (SystemIcons.getTheme() != null)
+      {
+        boolean systemIcons = ((Boolean)getSystemIcons().getValue()).booleanValue();
+        restartNeeded |= systemIcons != Customizing.SETTINGS.getBoolean(SystemIcons.KEY,false);
+        Customizing.SETTINGS.setAttribute(SystemIcons.KEY,systemIcons);
+      }
 			Color.ERROR.setSWTColor((org.eclipse.swt.graphics.Color)getColorError().getValue());
 			Color.SUCCESS.setSWTColor((org.eclipse.swt.graphics.Color)getColorSuccess().getValue());
       Color.MANDATORY_BG.setSWTColor((org.eclipse.swt.graphics.Color)getColorMandatoryBG().getValue());

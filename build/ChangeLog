@@ -1,5 +1,6 @@
 HEAD 2.13 (nightly)
 
+  * NEW: 0204 Unter Linux können in "Einstellungen»Look and Feel" die Icons des Desktop-Themes verwendet werden. Fehlt dort ein Icon, wird das mitgelieferte angezeigt
   * BUG: 0203 Icons wurden unter Linux bei erhöhter DPI-Einstellung des Desktops (Xft.dpi bzw. Textskalierung) nicht wie die Schrift vergrößert
   * BUG: 0202 Icons in der Symbolleiste wurden bei Größe "Mittel" und "Groß" aus der 16px-Fassung hochskaliert und waren unscharf
   * NEW: 0201 Hostname im Hinweis-Dialog bei abgelaufenen Zertifikaten mit anzeigen

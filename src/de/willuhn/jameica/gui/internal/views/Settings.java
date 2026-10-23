@@ -27,6 +27,7 @@ import de.willuhn.jameica.gui.internal.controller.SettingsControl;
 import de.willuhn.jameica.gui.parts.ButtonArea;
 import de.willuhn.jameica.gui.util.ColumnLayout;
 import de.willuhn.jameica.gui.util.SimpleContainer;
+import de.willuhn.jameica.gui.util.SystemIcons;
 import de.willuhn.jameica.gui.util.TabGroup;
 import de.willuhn.jameica.messaging.Message;
 import de.willuhn.jameica.messaging.MessageConsumer;
@@ -122,6 +123,12 @@ public class Settings extends AbstractView implements Extendable
     lnfGroup.addSeparator();
     lnfGroup.addLabelPair(i18n.tr("Textfarbe von Fehler- und Warnmeldungen"),control.getColorError());
     lnfGroup.addLabelPair(i18n.tr("Textfarbe von Erfolgsmeldungen"),control.getColorSuccess());
+
+    if (SystemIcons.getTheme() != null)
+    {
+      lnfGroup.addSeparator();
+      lnfGroup.addCheckbox(control.getSystemIcons(),i18n.tr("Symbole des Desktop-Themes \"{0}\" verwenden",SystemIcons.getTheme()));
+    }
 
     File f = new File("lib/splash.jar");
     if (f.exists() && f.isFile() && f.canRead())

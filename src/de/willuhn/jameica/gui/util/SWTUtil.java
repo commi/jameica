@@ -256,6 +256,7 @@ public class SWTUtil {
       public ImageData getImageData(int z)
       {
         final int zoom = imageZoom > 0 ? imageZoom : Math.round(z * getFontZoom() / 100f);
+        ZoomLevel level = ZoomLevel.ZOOM_100;
         InputStream is = null;
         
         try
@@ -271,6 +272,7 @@ public class SWTUtil {
               if (l.matches(zoom))
               {
                 is = getStream(filename,cl,l);
+                level = l;
                 
                 // In der passenden Zoom-Stufe gefunden.
                 if (is != null)
@@ -279,10 +281,19 @@ public class SWTUtil {
             }
           }
           
-          if (is != null)
-            return new ImageData(is);
-          
-          return new ImageData(Application.getClassLoader().getResourceAsStream("img/empty.gif"));
+          if (is == null)
+            return new ImageData(Application.getClassLoader().getResourceAsStream("img/empty.gif"));
+
+          ImageData data = new ImageData(is);
+          if (SystemIcons.isEnabled())
+          {
+            // Das System-Icon bekommt die Groesse des mitgelieferten Icons bei 100%
+            int size = Math.round(data.width * 100f / level.getLevel() * zoom / 100f);
+            ImageData system = SystemIcons.getImageData(filename,size);
+            if (system != null)
+              return system;
+          }
+          return data;
         }
         finally
         {
@@ -302,6 +313,14 @@ public class SWTUtil {
     return new Image(GUI.getDisplay(), Application.getClassLoader().getResourceAsStream("img/empty.gif"));
   }
 
+
+  /**
+   * Leert den Cache der Bilder, damit sie beim naechsten Abruf neu geladen werden.
+   */
+  public static void clearImageCache()
+  {
+    imagecache.clear();
+  }
 
   /**
    * Liefert das Bild in der angegebenen Kantenlaenge.
