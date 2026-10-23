@@ -45,6 +45,7 @@ import de.willuhn.util.Session;
 public class SWTUtil {
 
   private static Integer zoom = null;
+  private static Integer fontZoom = null;
 	private static Session imagecache = new Session();
 	
 	/**
@@ -198,6 +199,25 @@ public class SWTUtil {
 	}
 
   /**
+   * Liefert den Faktor, um den die Schrift unter Linux ueber die DPI-Einstellung des Desktops
+   * (Xft.dpi bzw. Textskalierung) vergroessert ist.
+   * SWT beruecksichtigt unter GTK nur den ganzzahligen Skalierungsfaktor des Monitors. Ohne
+   * diesen Faktor blieben die Icons bei 120 oder 144 DPI so klein wie bei 96 DPI, waehrend
+   * die Schrift waechst. Unter Windows und macOS ist die Einstellung bereits im Zoom von SWT enthalten.
+   * @return Faktor in Prozent, mindestens 100.
+   */
+  public static int getFontZoom()
+  {
+    if (fontZoom != null)
+      return fontZoom.intValue();
+
+    int dpi = "gtk".equals(SWT.getPlatform()) ? getDPI() : -1;
+    fontZoom = dpi > 96 ? Math.round(dpi * 100f / 96) : 100;
+    Logger.info("font zoom: " + fontZoom);
+    return fontZoom.intValue();
+  }
+
+  /**
    * Liefert ein SWT-Image basierend auf dem uebergebenen Dateinamen zurueck.
    * Wenn die Datei nicht existiert, wird stattdessen ein 1x1 Pixel grosses
    * und transparentes Dummy-Bild zurueckgeliefert.
@@ -235,7 +255,7 @@ public class SWTUtil {
       
       public ImageData getImageData(int z)
       {
-        final int zoom = imageZoom > 0 ? imageZoom : z;
+        final int zoom = imageZoom > 0 ? imageZoom : Math.round(z * getFontZoom() / 100f);
         InputStream is = null;
         
         try

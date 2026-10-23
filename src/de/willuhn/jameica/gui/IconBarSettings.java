@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import de.willuhn.jameica.gui.util.SWTUtil;
 import de.willuhn.jameica.system.Settings;
 import de.willuhn.logging.Logger;
 
@@ -96,12 +97,23 @@ public final class IconBarSettings
    */
   public static int getIconSize()
   {
-    String size = getSize();
+    return getIconSize(getSize());
+  }
+
+  /**
+   * Liefert die Icon-Groesse in Pixeln.
+   * Unter Linux waechst sie wie die Schrift mit der DPI-Einstellung des Desktops.
+   * @param size Groesse.
+   * @return Groesse in Pixeln.
+   */
+  public static int getIconSize(String size)
+  {
+    int px = 24;
     if (SIZE_SMALL.equals(size))
-      return 16;
-    if (SIZE_LARGE.equals(size))
-      return 32;
-    return 24;
+      px = 16;
+    else if (SIZE_LARGE.equals(size))
+      px = 32;
+    return px * SWTUtil.getFontZoom() / 100;
   }
 
   /**

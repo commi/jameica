@@ -364,12 +364,7 @@ public class IconBarSettingsPart implements Part
    */
   private int getSelectedIconSize()
   {
-    Object selected = getSize().getValue();
-    if (IconBarSettings.SIZE_SMALL.equals(selected))
-      return 16;
-    if (IconBarSettings.SIZE_LARGE.equals(selected))
-      return 32;
-    return 24;
+    return IconBarSettings.getIconSize((String) getSize().getValue());
   }
 
   /**

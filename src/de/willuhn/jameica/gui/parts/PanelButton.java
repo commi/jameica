@@ -227,11 +227,12 @@ public class PanelButton implements Part
    */
   private void drawIcon(GC gc, boolean pressed)
   {
-    int size = 16;
+    Image image = SWTUtil.getImage(this.icon);
+    Rectangle size = image.getBounds();
     // im gedrueckten Zustand ein Pixel weiter unten - das gibt den Effekt des Reindrueckens
-    int y = (this.height - size) / 2;
+    int y = (this.height - size.height) / 2;
     if (pressed) y++;
-    gc.drawImage(SWTUtil.getImage(this.icon),(this.width - size) / 2,y);
+    gc.drawImage(image,(this.width - size.width) / 2,y);
     this.drawText(gc, pressed);
   }
   

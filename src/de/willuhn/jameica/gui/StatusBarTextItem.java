@@ -16,6 +16,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -85,7 +86,7 @@ public class StatusBarTextItem implements StatusBarItem
       final Canvas c = new Canvas(comp,SWT.NONE);
       GridData gd = new GridData(GridData.FILL_BOTH);
       at.verticalAlignment = GridData.END;
-      gd.widthHint = 20;
+      gd.widthHint = SWTUtil.getImage("maximize.png").getBounds().width + 4;
       c.setLayoutData(gd);
       c.addListener(SWT.Paint,new Listener()
       {
@@ -93,7 +94,9 @@ public class StatusBarTextItem implements StatusBarItem
         {
           GC gc = event.gc;
           Rectangle size = c.getBounds();
-          gc.drawImage(SWTUtil.getImage(snapIn ? "minimize.png" : "maximize.png"),size.width - 20,3);
+          Image image = SWTUtil.getImage(snapIn ? "minimize.png" : "maximize.png");
+          Rectangle bounds = image.getBounds();
+          gc.drawImage(image,size.width - bounds.width - 4,Math.max(0,(size.height - bounds.height) / 2));
         }
       });
 
